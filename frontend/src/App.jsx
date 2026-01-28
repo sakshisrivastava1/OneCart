@@ -19,7 +19,7 @@ import NotFound from './pages/NotFound'
 import Ai from './pages/Ai'
 
 
-export const serverUrl = 'http://localhost:3000'
+export const serverUrl = 'https://onecart-backend-nbo6.onrender.com'
 
 function App() {
   const {userData} = useContext(userDataContext)
