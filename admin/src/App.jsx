@@ -8,7 +8,7 @@ import Login from './pages/Login'
 import { adminDataContext } from './context/AdminContext'
 import { ToastContainer } from 'react-toastify';
 
-  export const serverUrl = 'http://localhost:3000'
+  export const serverUrl = 'https://onecart-backend-nbo6.onrender.com'
 
 function App() {
   let {adminData} = useContext(adminDataContext)
