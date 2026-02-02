@@ -1,12 +1,10 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import Nav from './components/Nav'
-import { useContext } from 'react'
-import { userDataContext } from './context/UserContext'
-import { ToastContainer } from 'react-toastify';
 import Contact from './pages/Contact'
 import About from './pages/About'
 import Product from './pages/Product'
@@ -17,44 +15,122 @@ import Cart from './pages/Cart'
 import PlaceOrder from './pages/PlaceOrder'
 import Ai from './pages/Ai'
 
+import { userDataContext } from './context/UserContext'
 
 export const serverUrl = 'https://onecart-backend-nbo6.onrender.com'
 
+
+const ProtectedRoute = ({ children }) => {
+  const { userData } = useContext(userDataContext)
+  return userData ? children : <Navigate to="/login" />
+}
+
 function App() {
-  const {userData} = useContext(userDataContext)
+  const { userData } = useContext(userDataContext)
 
   return (
-     <>
-     <ToastContainer/>
-    {userData && <Nav/>}
+    <>
+      <ToastContainer />
+
+      {/* Navbar only after login */}
+      {userData && <Nav />}
+
       <Routes>
+        {/* Public Routes */}
+        <Route
+          path="/login"
+          element={!userData ? <Login /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/signup"
+          element={!userData ? <Signup /> : <Navigate to="/" />}
+        />
 
-        {!userData && <Route path='/login' element={<Login/>}/>}
- 
-        {!userData && <Route path='/signup' element={<Signup/>}/>}
+        {/* Protected Routes */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
 
-        {userData && <Route path='/' element={<Home/> }/>}
+        <Route
+          path="/about"
+          element={
+            <ProtectedRoute>
+              <About />
+            </ProtectedRoute>
+          }
+        />
 
-        {userData && <Route path='/about' element={<About/> }/>}
-      
-        {userData && <Route path='/collection' element={<Collections/>}/>}
+        <Route
+          path="/collection"
+          element={
+            <ProtectedRoute>
+              <Collections />
+            </ProtectedRoute>
+          }
+        />
 
-        {userData && <Route path='/product' element={<Product/> }/>}
+        <Route
+          path="/product"
+          element={
+            <ProtectedRoute>
+              <Product />
+            </ProtectedRoute>
+          }
+        />
 
-        {userData && <Route path='/contact' element={<Contact/> }/>}
-        
-        {userData && <Route path='/productdetail/:productId' element={<ProductDetail/>}/>}
+        <Route
+          path="/productdetail/:productId"
+          element={
+            <ProtectedRoute>
+              <ProductDetail />
+            </ProtectedRoute>
+          }
+        />
 
-        {userData && <Route path='/cart' element={<Cart/> }/>}
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
 
-        {userData && <Route path='/placeorder' element={<PlaceOrder/>}/>}
+        <Route
+          path="/placeorder"
+          element={
+            <ProtectedRoute>
+              <PlaceOrder />
+            </ProtectedRoute>
+          }
+        />
 
-        {userData && <Route path='/order' element={<Order/>}/>}
+        <Route
+          path="/order"
+          element={
+            <ProtectedRoute>
+              <Order />
+            </ProtectedRoute>
+          }
+        />
 
-        
-
+        <Route
+          path="/contact"
+          element={
+            <ProtectedRoute>
+              <Contact />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-      <Ai/>
+
+      {/* AI only after login */}
+      {userData && <Ai />}
     </>
   )
 }
