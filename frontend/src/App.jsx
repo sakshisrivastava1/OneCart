@@ -1,6 +1,6 @@
 import React, { useCallback, useContext } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import Registration from './pages/Registration'
+import Signup from './pages/Signup'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Nav from './component/Nav'
@@ -33,7 +33,7 @@ let location = useLocation()
 
         <Route path='/signup' 
         element={userData ? (<Navigate to={location.state?.from || "/"}/> ) 
-        : (<Registration/>)}/>
+        : (<Signup/>)}/>
 
         <Route path='/' 
         element={userData ? <Home/> : <Navigate to="/login" state={{from: location.pathname}} /> }/>
