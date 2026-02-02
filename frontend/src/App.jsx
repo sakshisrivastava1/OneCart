@@ -15,7 +15,6 @@ import Collections from './pages/Collections'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import PlaceOrder from './pages/PlaceOrder'
-import NotFound from './pages/NotFound'
 import Ai from './pages/Ai'
 
 
@@ -52,7 +51,7 @@ function App() {
 
         {userData && <Route path='/order' element={<Order/>}/>}
 
-        <Route path='*' element={<NotFound/>}/>
+        
 
       </Routes>
       <Ai/>
