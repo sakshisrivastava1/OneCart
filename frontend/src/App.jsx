@@ -16,6 +16,9 @@ import Order from './pages/Order'
 import { ToastContainer } from 'react-toastify';
 import NotFound from './pages/NotFound'
 import Ai from './pages/Ai'
+
+export const serverUrl = "https://onecart-backend-nbo6.onrender.com"
+
 function App() {
 let {userData} = useContext(userDataContext)
 let location = useLocation()
