@@ -80,7 +80,7 @@ Razorpay
 
 ⚙️ Setup & Installation
 1️⃣ Clone the repository
-git clone https://github.com/yourusername/onecart.git
+git clone https://github.com/sakshisrivastava1/OneCart
 cd onecart
 2️⃣ Install Dependencies
 cd frontend && npm install
