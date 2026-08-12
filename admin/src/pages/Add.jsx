@@ -1,20 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Nav from '../component/Nav'
 import Sidebar from '../component/Sidebar'
 import upload from '../assets/upload image.jpg'
 import { useState } from 'react'
+import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
-import {ClipLoader} from 'react-spinners'
 import { toast } from 'react-toastify'
-import { serverUrl } from '../App'
+import Loading from '../component/Loading'
 
 function Add() {
-
   let [image1,setImage1] = useState(false)
   let [image2,setImage2] = useState(false)
   let [image3,setImage3] = useState(false)
   let [image4,setImage4] = useState(false)
-
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [category, setCategory] = useState("Men")
@@ -23,7 +21,7 @@ function Add() {
   const [bestseller, setBestSeller] = useState(false)
   const [sizes,setSizes] = useState([])
   const [loading,setLoading] = useState(false)
-
+  let {serverUrl} = useContext(authDataContext)
 
   const handleAddProduct = async (e) => {
     setLoading(true)
@@ -42,14 +40,14 @@ function Add() {
       formData.append("image3",image3)
       formData.append("image4",image4)
 
-      const result = await axios.post(serverUrl + "/api/product/add" , formData, {withCredentials:true} )
+      let result = await axios.post(serverUrl + "/api/product/add" , formData, {withCredentials:true} )
 
       console.log(result.data)
-      toast.success("Product Added!")
+      toast.success("Product added successfully")
       setLoading(false)
 
       if(result.data){
-          setName("")
+      setName("")
       setDescription("")
       setImage1(false)
       setImage2(false)
@@ -65,12 +63,11 @@ function Add() {
     } catch (error) {
        console.log(error)
        setLoading(false)
-       toast.error("Add Product Failed")
+       toast.error("Failed to add product")
     }
 
     
   }
-  
   return (
     <div className='w-[100vw] min-h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-[white] overflow-x-hidden relative'>
     <Nav/>
@@ -181,9 +178,10 @@ function Add() {
 
        </div>
 
-       <button disabled={loading} className='w-[140px] px-[20px] py-[20px] rounded-xl bg-teal-800 flex items-center justify-center gap-[10px] text-white active:bg-slate-700 active:text-white active:border-[2px] border-white'>
-        {loading ? <ClipLoader size={30} color='white'/> : "Add Product"}
-        </button>
+       <button className='w-[140px] px-[20px] py-[20px] rounded-xl bg-[#65d8f7] flex items-center justify-center gap-[10px] text-black active:bg-slate-700 active:text-white active:border-[2px] border-white'>{loading ? <Loading/> : "Add Product"}</button>
+
+
+
 
       </form>
     </div>

@@ -2,49 +2,52 @@ import React from 'react'
 import Nav from '../component/Nav'
 import Sidebar from '../component/Sidebar'
 import { useState } from 'react'
+import { useContext } from 'react'
+import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import { useEffect } from 'react'
 import { SiEbox } from "react-icons/si";
-import { serverUrl } from '../App'
 
 function Orders() {
 
-  const [orders,setOrders] = useState([])
+  let [orders,setOrders] = useState([])
+  let {serverUrl} = useContext(authDataContext)
 
-  const fetchAllOrders =async () => {
+    const fetchAllOrders =async () => {
     try {
-      const result = await axios.get(serverUrl + '/api/order/list',{withCredentials:true})
-      setOrders(result.data.reverse())     
+      const result = await axios.post(serverUrl + '/api/order/list' , {} ,{withCredentials:true})
+      setOrders(result.data.reverse())
+      
     } catch (error) {
       console.log(error)
-    }   
+    }
+    
   }
-
-  const statusHandler = async (e , orderId) => {
-    try {
-      const result = await axios.post(serverUrl + '/api/order/status' , {orderId,status:e.target.value},{withCredentials:true})
-      if(result.data){
-        await fetchAllOrders()
-      }
-      } catch (error) {
-      console.log(error)
+   const statusHandler = async (e , orderId) => {
+         try {
+          const result = await axios.post(serverUrl + '/api/order/status' , {orderId,status:e.target.value},{withCredentials:true})
+          if(result.data){
+            await fetchAllOrders()
+          }
+         } catch (error) {
+          console.log(error)
           
-      }
+         }
   }
-
-  useEffect(()=>{fetchAllOrders()},[])
-
+  useEffect(()=>{
+    fetchAllOrders()
+  },[])
   return (
-    <div className='w-[99vw] min-h-[100vh] overflow-auto bg-gradient-to-l from-[#141414] to-[#0c2025] text-[white]'>
+    <div className='w-[99vw] min-h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-[white]'>
       
       <Nav/>
       <div className='w-[100%] h-[100%] flex items-center lg:justify-start justify-center'>
         <Sidebar/>
         <div className='lg:w-[85%] md:w-[70%] h-[100%] lg:ml-[310px] md:ml-[250px] mt-[70px] flex flex-col gap-[30px] overflow-x-hidden py-[50px] ml-[100px]'>
-          <div className='w-[400px] h-[50px] text-[28px] md:text-[40px] mb-[10px] text-white'>All Orders List</div>
+          <div className='w-[400px] h-[50px] text-[28px] md:text-[40px] mb-[20px] text-white'>All Orders List</div>
           {
            orders.map((order,index)=>(
-            <div key={index} className='w-[90%] h-[40%] bg-black rounded-xl flex lg:items-center items-start justify-between flex-col lg:flex-row p-[10px] md:px-[20px]  gap-[20px]'>
+            <div key={index} className='w-[90%] h-[40%] bg-slate-600 rounded-xl flex lg:items-center items-start justify-between  flex-col lg:flex-row p-[10px] md:px-[20px]  gap-[20px]'>
             <SiEbox  className='w-[60px] h-[60px] text-[black] p-[5px] rounded-lg bg-[white]'/>
 
             <div>
@@ -76,7 +79,7 @@ function Orders() {
                   <p>Date : {new Date(order.date).toLocaleDateString()}</p>
                    <p className='text-[20px] text-[white]'> ₹ {order.amount}</p>
                 </div>
-                <select  value={order.status} className='px-[5px] py-[10px] bg-teal-900 hover:bg-teal-800 rounded-lg border-[1px] border-[#96eef3]' onChange={(e)=>statusHandler(e,order._id)} >
+                <select  value={order.status} className='px-[5px] py-[10px] bg-slate-500 rounded-lg border-[1px] border-[#96eef3]' onChange={(e)=>statusHandler(e,order._id)} >
                   <option value="Order Placed">Order Placed</option>
                   <option value="Packing">Packing</option>
                   <option value="Shipped">Shipped</option>

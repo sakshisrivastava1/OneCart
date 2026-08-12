@@ -3,37 +3,37 @@ import logo from '../assets/logo.png'
 import { IoEyeOutline } from "react-icons/io5";
 import { IoEye } from "react-icons/io5";
 import axios from 'axios'
-import { ClipLoader } from 'react-spinners';
+import { authDataContext } from '../context/AuthContext';
 import { adminDataContext } from '../context/AdminContext';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { serverUrl } from '../App';
 
 function Login() {
-  const [show,setShow] = useState(false)
-  const [email,setEmail] = useState("")
-  const [password,setPassword] = useState("")
-  const {getAdmin} = useContext(adminDataContext)
-  const navigate = useNavigate()
-  const [loading,setLoading] = useState(false)
+  let [show,setShow] = useState(false)
+          let [email,setEmail] = useState("")
+          let [password,setPassword] = useState("")
+          let {serverUrl} = useContext(authDataContext)
+          let {adminData , getAdmin} = useContext(adminDataContext)
+          let navigate = useNavigate()
+          const [loading,setLoading] = useState(false)
 
-  const AdminLogin = async (e) => {
-    setLoading(true)
-    e.preventDefault()
-    try {
-      const result = await axios.post(serverUrl + '/api/auth/adminlogin',{email , password} , {withCredentials:true})
-      console.log(result.data)
-      toast.success("AdminLogin Successfully")
-      getAdmin()
-      navigate("/")
-      setLoading(false)
-    } catch (error) {
-      console.log(error)
-      toast.error("AdminLogin Failed")
-      setLoading(false)
-    }            
-  }
-
+          const AdminLogin = async (e) => {
+            setLoading(true)
+            e.preventDefault()
+            try {
+              const result = await axios.post(serverUrl + '/api/auth/adminlogin',{email , password} , {withCredentials:true})
+              console.log(result.data)
+              toast.success("AdminLogin Successful")
+              getAdmin()
+              navigate("/")
+              setLoading(false)
+            } catch (error) {
+              console.log(error)
+              toast.error("AdminLogin Failed")
+              setLoading(false)
+            }
+            
+          }
   return (
     <div className='w-[100vw] h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-[white] flex flex-col items-center justify-start'>
        <div className='w-[100%] h-[80px] flex items-center justify-start px-[30px] gap-[10px] cursor-pointer' >
@@ -56,9 +56,7 @@ function Login() {
                      <input type={show?"text":"password"} className='w-[100%] h-[50px] border-[2px] border-[#96969635] backdrop:blur-sm rounded-lg shadow-lg bg-transparent placeholder-[#ffffffc7] px-[20px] font-semibold' placeholder='Password' required onChange={(e)=>setPassword(e.target.value)} value={password}/>
                      {!show && <IoEyeOutline className='w-[20px] h-[20px] cursor-pointer absolute right-[5%] bottom-[50%]' onClick={()=>setShow(prev => !prev)}/>}
                      {show && <IoEye className='w-[20px] h-[20px] cursor-pointer absolute right-[5%] bottom-[50%]' onClick={()=>setShow(prev => !prev)}/>}
-                     <button disabled={loading} className='w-[100%] h-[50px] bg-[#6060f5] rounded-lg flex items-center justify-center mt-[20px] text-[17px] font-semibold'>
-                        {loading ? <ClipLoader size={30} color='white'/> : 'Login'}
-                     </button>
+                     <button className='w-[100%] h-[50px] bg-[#6060f5] rounded-lg flex items-center justify-center mt-[20px] text-[17px] font-semibold'>Login</button>
                     
                </div>
            </form>

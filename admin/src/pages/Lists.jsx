@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Nav from '../component/Nav'
 import Sidebar from '../component/Sidebar'
+import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
-import { serverUrl } from '../App'
 
 function Lists() {
-  
-  const [list ,setList] = useState([])
+  let [list ,setList] = useState([])
+  let {serverUrl} = useContext(authDataContext)
+
 
   const fetchList = async () => {
     try {
-      const result = await axios.get(serverUrl + "/api/product/list" )
+      let result = await axios.get(serverUrl + "/api/product/list" )
       setList(result.data)
       console.log(result.data)
     } catch (error) {
       console.log(error)
-    }  
+    }
+    
   }
 
   const removeList = async (id) => {
+
     try {
-      const result = await axios.get(`${serverUrl}/api/product/remove/${id}`,{withCredentials:true})
+      let result = await axios.post(`${serverUrl}/api/product/remove/${id}`,{},{withCredentials:true})
+
       if(result.data){
         fetchList()
       }
@@ -29,11 +33,13 @@ function Lists() {
       }
     } catch (error) {
       console.log(error)
-    }   
+    }
+    
   }
 
-  useEffect(()=>{fetchList()},[])
-
+  useEffect(()=>{
+   fetchList()
+  },[])
   return (
     <div className='w-[100vw] min-h-[100vh] bg-gradient-to-l from-[#141414] to-[#0c2025] text-[white]'>
       <Nav/>
